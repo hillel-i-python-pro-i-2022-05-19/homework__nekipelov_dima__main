@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}
+Считывание файла
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3>Вот что у нас в файле {{ file_name }}:</h3>
+    {% for i in text.split("\n") %}
+    <p>{{ i }}</p>
+    {% endfor %}
+</div>
+{% endblock %}

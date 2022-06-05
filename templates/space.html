@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+Кто здесь?
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3>Сейчас в космосе {{ people[1] }} человек:</h3>
+    <ul>
+        {% for i in people[0] %}
+        <li>{{ i }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

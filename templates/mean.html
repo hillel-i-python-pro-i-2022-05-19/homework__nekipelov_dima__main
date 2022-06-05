@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+Среднячок
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h3>Средние значения роста и веса:</h3>
+    <p>Средний рост: {{ average[0] }} см</p>
+    <p>Средний вес: {{ average[1] }} кг</p>
+</div>
+{% endblock %}
