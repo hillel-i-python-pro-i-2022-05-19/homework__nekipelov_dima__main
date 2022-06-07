@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+Редактирование
+{% endblock %}
+
+{% block body %}
+<div class="container px-4 py-5">
+    <h2>Редактировать контакт</h2>
+    {% for i in record %}
+    <form method="post">
+        <div class="row g-3">
+            <div class="col">
+                <input type="text" name="contact_name" id="contact_name" class="form-control"
+                       value="{{ i['contactName'] }}" placeholder="Имя">
+            </div>
+            <div class="col">
+                <input type="text" name="contact_phone" id="contact_phone" class="form-control"
+                       value="{{ i['phoneValue'] }}" placeholder="Телефон">
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-success" value="Сохранить">
+            </div>
+        </div>
+    </form>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,11 +1,27 @@
 import csv
+import pathlib
+import sqlite3
 
 import requests
 from faker import Faker
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 fake = Faker('ru_RU')
 app = Flask(__name__)
+DB_PATH = pathlib.Path('db', 'db.sqlite')
+
+
+class Connection:
+    def __init__(self):
+        self._connection: sqlite3.Connection | None = None
+
+    def __enter__(self):
+        self._connection = sqlite3.connect(DB_PATH)
+        self._connection.row_factory = sqlite3.Row
+        return self._connection
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._connection.close()
 
 
 @app.route('/')
@@ -46,6 +62,58 @@ def mean():
     file_name = 'people_data.csv'
     average = get_average(file_name)
     return render_template("mean.html", average=average)
+
+
+@app.route('/phones/read')
+def phones_read():
+    with Connection() as connection:
+        records = connection.execute('SELECT * FROM phones').fetchall()
+    return render_template('phones.html', records=records)
+
+
+@app.route('/phones/create', methods=['POST', 'GET'])
+def phones_create():
+    if request.method == 'POST':
+        contact_name = request.form['contact_name']
+        contact_phone = request.form['contact_phone']
+        with Connection() as connection:
+            with connection:
+                connection.execute('INSERT INTO phones (contactName, phoneValue) VALUES (:name, :phone)',
+                                   (contact_name, contact_phone))
+        return redirect('/phones/read')
+    else:
+        return render_template("create.html")
+
+
+@app.route('/phones/delete/<int:phoneID>')
+def phones_delete(phoneID):
+    with Connection() as connection:
+        with connection:
+            connection.execute('DELETE FROM phones WHERE (phoneID=:phoneID)', {'phoneID': phoneID})
+    return redirect('/phones/read')
+
+
+@app.route('/phones/update/<int:phoneID>', methods=['POST', 'GET'])
+def phones_update(phoneID):
+    if request.method == 'POST':
+        contact_name = request.form['contact_name']
+        contact_phone = request.form['contact_phone']
+        print(contact_name)
+        print(phoneID)
+        with Connection() as connection:
+            with connection:
+                connection.execute(
+                    'UPDATE phones '
+                    'SET contactName=:contact_name, phoneValue=:contact_phone '
+                    'WHERE (phoneID=:phoneID)',
+                    {"contact_name": contact_name, "contact_phone": contact_phone, "phoneID": phoneID}
+                )
+        return redirect('/phones/read')
+    else:
+        with Connection() as connection:
+            record = connection.execute('SELECT * FROM phones WHERE (phoneID=:phoneID)',
+                                        {'phoneID': phoneID}).fetchall()
+        return render_template("update.html", record=record)
 
 
 def get_space(url: str) -> tuple:

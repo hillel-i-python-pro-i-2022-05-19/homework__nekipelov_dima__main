@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Телефонная книга
+{% endblock %}
+
+{% block body %}
+<div class="container px-4 py-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Телефонная книга</h2>
+    <a href="/phones/create" class="btn btn-primary">Добавить контакт</a>
+</div>
+<div class="container">
+    <ul>
+        {% for i in records %}
+        <div class="row g-4 py-1 row-cols-1 row-cols-lg-4">
+            <li class="pb-2 border-bottom">{{ i["contactName"] }}: {{ i["phoneValue"] }}</li>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="/phones/update/{{ i['phoneID'] }}" class="btn btn-sm btn-primary"> Редактировать</a>
+                <a href="/phones/delete/{{ i['phoneID'] }}" class="btn btn-sm btn-danger">Удалить</a>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

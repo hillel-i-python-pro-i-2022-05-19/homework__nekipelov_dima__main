@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Добавить контакт
+{% endblock %}
+
+{% block body %}
+<div class="container px-4 py-5">
+    <h2>Добавить новый контакт</h2>
+    <form method="post">
+        <div class="row g-3">
+            <div class="col">
+                <input type="text" name="contact_name" id="contact_name" class="form-control" placeholder="Имя">
+            </div>
+            <div class="col">
+                <input type="text" name="contact_phone" id="contact_phone" class="form-control" placeholder="Телефон">
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-success" value="Отправить">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
